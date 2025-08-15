@@ -1,5 +1,6 @@
 "use client";
-import axios from "axios";
+import { userSignin } from "@/app/actions/user";
+import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 
 interface LabelledInputType {
@@ -40,10 +41,16 @@ export function Signin() {
     username: "",
     password: "",
   });
+  const router = useRouter();
 
   async function handleSignin() {
     try {
-      await axios.post("http://localhost:3000/api/user", formData);
+      await userSignin(formData.username, formData.password);
+      router.push("/");
+      setFormData({
+        username: "",
+        password: "",
+      });
     } catch (error) {
       throw new Error("Failed to sign in");
     }
